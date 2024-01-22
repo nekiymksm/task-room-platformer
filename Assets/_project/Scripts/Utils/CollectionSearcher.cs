@@ -1,21 +1,23 @@
 ﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace _project.Scripts.Utils
 {
     public class CollectionSearcher
     {
-        public static bool TryGetItem<T, TK>(IEnumerable<TK> items, out T collectionItem) where T : class
+        public static bool TryGetItem<T, TK>(IEnumerable<TK> items, out T item) where T : class, TK
         {
-            foreach (var item in items)
+            foreach (var collectionItem in items)
             {
-                if (items.GetType() == typeof(T))
+                if (collectionItem.GetType() == typeof(T))
                 {
-                    collectionItem = item as T;
+                    item = collectionItem as T;
                     return true;
                 }
             }
             
-            collectionItem = null;
+            Debug.LogError($"{typeof(T)}_not_found_at_the_collection_{typeof(TK)}");
+            item = null;
             return false;
         }
     }

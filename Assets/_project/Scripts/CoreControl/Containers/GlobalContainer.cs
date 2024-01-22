@@ -1,28 +1,29 @@
-﻿using System.Collections.Generic;
-using _project.Scripts.CoreControl.Handlers.Base;
-using IContainer = _project.Scripts.CoreControl.Containers.Base.IContainer;
+﻿using _project.Scripts.CoreControl.Handlers;
+using _project.Scripts.Location.Base;
+using _project.Scripts.PlayerCharacter;
+using _project.Scripts.ViewTracking;
+using UnityEngine.SceneManagement;
 
 namespace _project.Scripts.CoreControl.Containers
 {
-    public class GlobalContainer : IContainer
+    public class GlobalContainer : HandlersContainer
     {
-        private static GlobalContainer _instance;
-    
-        public List<IHandler> Handlers { get; }
+        public static GlobalContainer Instance;
 
-        private GlobalContainer()
+        protected override void OnInit()
         {
-            Handlers = new List<IHandler>();
+            DontDestroyOnLoad(gameObject);
+            Instance = this;
+        
+            AddHandler(new LoadHandler());
+            AddHandler(new CharacterInstanceHandler());
+            AddHandler(new ViewTrackingCameraInstanceHandler());
+            AddHandler(new InputHandler());
         }
 
-        public static GlobalContainer GetInstance()
+        protected override void OnRun()
         {
-            if (_instance == null)
-            {
-                _instance = new GlobalContainer();
-            }
-        
-            return _instance;
+            SceneManager.LoadScene((int)LocationType.Pass);
         }
     }
 }

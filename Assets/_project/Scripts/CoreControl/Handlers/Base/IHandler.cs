@@ -2,7 +2,7 @@
 {
     public interface IHandler
     {
-        public void Init();
+        public void Init(HandlersContainer handlersContainer);
 
         public void Run();
     }
