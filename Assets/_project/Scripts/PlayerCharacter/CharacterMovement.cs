@@ -29,6 +29,10 @@ namespace _project.Scripts.PlayerCharacter
             {
                 _rigidbody.AddForce(Vector3.up * _characterConfig.JumpForce, ForceMode.Impulse);
             }
+            
+            transform.rotation = _rigidbody.velocity.magnitude < 0
+                ? Quaternion.Euler(Vector3.zero)
+                : Quaternion.Euler(0, _inputHandler.HorizontalAxis * -90, 0);
         }
 
         private void OnCollisionStay(Collision collision)

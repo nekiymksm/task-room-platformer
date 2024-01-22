@@ -7,7 +7,7 @@ namespace _project.Scripts.PlayerCharacter
     {
         private enum CharacterMove
         {
-            Forward,
+            Run,
             Jump,
         }
         
@@ -16,20 +16,24 @@ namespace _project.Scripts.PlayerCharacter
         private InputHandler _inputHandler;
         private CharacterMovement _characterMovement;
 
+        public string RunParametr;
+        public string JumpParametr;
+
+        private void Start()
+        {
+            var parameters = _animator.parameters;
+            
+            RunParametr = parameters[(int) CharacterMove.Run].name;
+            JumpParametr = parameters[(int) CharacterMove.Jump].name;
+        }
+
         private void Update()
         {
-            _animator.SetBool(
-                _animator.parameters[(int) CharacterMove.Forward].nameHash, 
-                _characterMovement.IsGrounded && _inputHandler.HorizontalAxis != 0);
-
-            if (_characterMovement.IsGrounded)
-            {
-                transform.rotation = Quaternion.Euler(0, _inputHandler.HorizontalAxis * -90, 0);
-            }
+            _animator.SetBool(RunParametr, _characterMovement.IsGrounded && _inputHandler.HorizontalAxis != 0);
 
             if (_characterMovement.IsGrounded && _inputHandler.JumpAxis > 0)
             {
-                _animator.SetTrigger(_animator.parameters[(int) CharacterMove.Jump].nameHash);
+                _animator.SetTrigger(JumpParametr);
             }
         }
 
