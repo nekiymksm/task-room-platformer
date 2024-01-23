@@ -10,5 +10,6 @@ namespace _project.Scripts.Configs
         [field:SerializeField] public float MoveForce { get; private set; }
         [field:SerializeField] public float MaxMoveSpeed { get; private set; }
         [field:SerializeField] public float JumpForce { get; private set; }
+        [field:SerializeField] public float RotationSpeed { get; private set; }
     }
 }

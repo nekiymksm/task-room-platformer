@@ -21,7 +21,7 @@ namespace _project.Scripts.PlayerCharacter
             _moveDirection.x = _inputHandler.HorizontalAxis;
             _moveDirection.y = _inputHandler.JumpAxis;
 
-            if (IsGrounded && _rigidbody.velocity.magnitude < _characterConfig.MaxMoveSpeed)
+            if (IsGrounded && Mathf.Abs(_rigidbody.velocity.x) < _characterConfig.MaxMoveSpeed)
             {
                 _rigidbody.AddForce(_moveDirection * _characterConfig.MoveForce, ForceMode.Impulse);
             }
@@ -31,35 +31,7 @@ namespace _project.Scripts.PlayerCharacter
                 _rigidbody.AddForce(Vector3.up * _characterConfig.JumpForce, ForceMode.Impulse);
             }
             
-            // if (_rigidbody.velocity.magnitude <= 0 && _inputHandler.HorizontalAxis == 0)
-            // {
-            //     _rigidbody.MoveRotation(Quaternion.Euler(Vector3.zero));
-            // }
-            
-            // if (_rigidbody.velocity.magnitude > 0 && _inputHandler.HorizontalAxis != 0)
-            // {
-            //     _rigidbody.MoveRotation(Quaternion.Euler(0, _inputHandler.HorizontalAxis * -90, 0));
-            // }
-            Debug.LogError(_rigidbody.velocity.magnitude);
-            if (_rigidbody.velocity.magnitude <= 0)
-            {
-                _moveRotation = Vector3.zero;
-            }
-            else
-            {
-                switch (_inputHandler.HorizontalAxis)
-                {
-                    case > 0:
-                        _moveRotation.y = -90;
-                        break;
-                
-                    case < 0:
-                        _moveRotation.y = 90;
-                        break;
-                }
-            }
-            
-            _rigidbody.MoveRotation(Quaternion.Euler(_moveRotation));
+            SetRotation();
         }
 
         private void OnCollisionStay(Collision collision)
@@ -88,6 +60,29 @@ namespace _project.Scripts.PlayerCharacter
         {
             _characterConfig = characterConfig;
             _inputHandler = inputHandler;
+        }
+
+        private void SetRotation()
+        {
+            if (_moveDirection.x == 0 && Mathf.Abs(_rigidbody.velocity.x) < 0.5f)
+            {
+                _moveRotation.y = Mathf.Lerp(_moveRotation.y, 0, _characterConfig.RotationSpeed);
+            }
+            else
+            {
+                switch (_moveDirection.x)
+                {
+                    case > 0:
+                        _moveRotation.y = Mathf.Lerp(_moveRotation.y, -90, _characterConfig.RotationSpeed);
+                        break;
+                
+                    case < 0:
+                        _moveRotation.y = Mathf.Lerp(_moveRotation.y, 90, _characterConfig.RotationSpeed);
+                        break;
+                }
+            }
+            
+            _rigidbody.MoveRotation(Quaternion.Euler(_moveRotation));
         }
     }
 }

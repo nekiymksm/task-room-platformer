@@ -16,24 +16,24 @@ namespace _project.Scripts.PlayerCharacter
         private InputHandler _inputHandler;
         private CharacterMovement _characterMovement;
 
-        public string RunParametr;
-        public string JumpParametr;
+        public string _runParam;
+        public string _jumpParam;
 
         private void Start()
         {
-            var parameters = _animator.parameters;
+            var param = _animator.parameters;
             
-            RunParametr = parameters[(int) CharacterMove.Run].name;
-            JumpParametr = parameters[(int) CharacterMove.Jump].name;
+            _runParam = param[(int) CharacterMove.Run].name;
+            _jumpParam = param[(int) CharacterMove.Jump].name;
         }
 
         private void Update()
         {
-            _animator.SetBool(RunParametr, _characterMovement.IsGrounded && _inputHandler.HorizontalAxis != 0);
+            _animator.SetBool(_runParam, _characterMovement.IsGrounded && _inputHandler.HorizontalAxis != 0);
 
             if (_characterMovement.IsGrounded && _inputHandler.JumpAxis > 0)
             {
-                _animator.SetTrigger(JumpParametr);
+                _animator.SetTrigger(_jumpParam);
             }
         }
 

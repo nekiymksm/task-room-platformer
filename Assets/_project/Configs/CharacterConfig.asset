@@ -16,3 +16,4 @@ MonoBehaviour:
   <MoveForce>k__BackingField: 50
   <MaxMoveSpeed>k__BackingField: 5
   <JumpForce>k__BackingField: 75
+  <RotationSpeed>k__BackingField: 0.175
