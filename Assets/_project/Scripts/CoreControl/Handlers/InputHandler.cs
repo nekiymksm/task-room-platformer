@@ -15,5 +15,13 @@ namespace _project.Scripts.CoreControl.Handlers
         public void Run()
         {
         }
+
+        private void GetFadedValue(float velocityValue)
+        {
+            if (HorizontalAxis == 0 && velocityValue > 0)
+            {
+                
+            }
+        }
     }
 }

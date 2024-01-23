@@ -12,6 +12,7 @@ namespace _project.Scripts.PlayerCharacter
         private CharacterConfig _characterConfig;
         private InputHandler _inputHandler;
         private Vector3 _moveDirection;
+        private Vector3 _moveRotation;
 
         public bool IsGrounded { get; private set; }
 
@@ -30,9 +31,35 @@ namespace _project.Scripts.PlayerCharacter
                 _rigidbody.AddForce(Vector3.up * _characterConfig.JumpForce, ForceMode.Impulse);
             }
             
-            transform.rotation = _rigidbody.velocity.magnitude < 0
-                ? Quaternion.Euler(Vector3.zero)
-                : Quaternion.Euler(0, _inputHandler.HorizontalAxis * -90, 0);
+            // if (_rigidbody.velocity.magnitude <= 0 && _inputHandler.HorizontalAxis == 0)
+            // {
+            //     _rigidbody.MoveRotation(Quaternion.Euler(Vector3.zero));
+            // }
+            
+            // if (_rigidbody.velocity.magnitude > 0 && _inputHandler.HorizontalAxis != 0)
+            // {
+            //     _rigidbody.MoveRotation(Quaternion.Euler(0, _inputHandler.HorizontalAxis * -90, 0));
+            // }
+            Debug.LogError(_rigidbody.velocity.magnitude);
+            if (_rigidbody.velocity.magnitude <= 0)
+            {
+                _moveRotation = Vector3.zero;
+            }
+            else
+            {
+                switch (_inputHandler.HorizontalAxis)
+                {
+                    case > 0:
+                        _moveRotation.y = -90;
+                        break;
+                
+                    case < 0:
+                        _moveRotation.y = 90;
+                        break;
+                }
+            }
+            
+            _rigidbody.MoveRotation(Quaternion.Euler(_moveRotation));
         }
 
         private void OnCollisionStay(Collision collision)
