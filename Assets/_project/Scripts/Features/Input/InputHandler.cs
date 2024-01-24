@@ -1,4 +1,7 @@
+using System.Linq.Expressions;
 using _project.Scripts.CoreControl.Base;
+using _project.Scripts.Features.Input.Base;
+using UnityEngine;
 
 namespace _project.Scripts.Features.Input
 {
@@ -6,7 +9,11 @@ namespace _project.Scripts.Features.Input
     {
         private const string HorizontalAxisName = "Horizontal";
         private const string JumpAxisName = "Jump";
-
+        private const string CancelAxisName = "Cancel";
+        
+        private float _cancelAxisValue;
+        private bool _isCancelPressed;
+        
         public void Init(HandlersContainer handlersContainer)
         {
         }
@@ -15,18 +22,36 @@ namespace _project.Scripts.Features.Input
         {
         }
 
-        public float GetHorizontalAxisValue(bool isRaw = false)
+        public float GetAxisValue(AxisKind axisKind, bool isRaw = false)
         {
+            string axisName = string.Empty;
+            
+            switch (axisKind)
+            {
+                case AxisKind.Horizontal:
+                    axisName = HorizontalAxisName;
+                    break;
+                
+                case AxisKind.Jump:
+                    axisName = JumpAxisName;
+                    break;
+            }
+            
             return isRaw 
-                ? UnityEngine.Input.GetAxisRaw(HorizontalAxisName) 
-                : UnityEngine.Input.GetAxis(HorizontalAxisName);
+                ? UnityEngine.Input.GetAxisRaw(axisName) 
+                : UnityEngine.Input.GetAxis(axisName);
         }
-        
-        public float GetJumpAxisValue(bool isRaw = false)
+
+        public bool TryCancel()
         {
-            return isRaw 
-                ? UnityEngine.Input.GetAxisRaw(JumpAxisName) 
-                : UnityEngine.Input.GetAxis(JumpAxisName);
+            _cancelAxisValue = UnityEngine.Input.GetAxisRaw(CancelAxisName);
+            
+            if (_isCancelPressed == false && _cancelAxisValue > 0)
+            {
+                _isCancelPressed = true;
+            }
+            
+            return _isCancelPressed;
         }
     }
 }

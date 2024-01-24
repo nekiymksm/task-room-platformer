@@ -1,7 +1,7 @@
 ﻿using _project.Scripts.Utils;
 using UnityEngine;
 
-namespace _project.Scripts.Configs
+namespace _project.Scripts.Configs.Base
 {
     [CreateAssetMenu(fileName = "ConfigsCollection", menuName = "Configs/ConfigsCollection")]
     public class ConfigsCollection : ScriptableObject
@@ -10,12 +10,8 @@ namespace _project.Scripts.Configs
 
         public T GetConfig<T>() where T : ScriptableObject
         {
-            if (CollectionItemSearcher.TryGetItem(_configs, out T config))
-            {
-                return config;
-            }
-
-            return null;
+            CollectionItemSearcher.TryGetItem(_configs, out T config);
+            return config;
         }
     }
 }

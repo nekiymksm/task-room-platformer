@@ -1,4 +1,5 @@
 using _project.Scripts.Configs;
+using _project.Scripts.Configs.Base;
 using _project.Scripts.CoreControl;
 using _project.Scripts.CoreControl.Base;
 using _project.Scripts.Features.Location.Base;
@@ -51,7 +52,7 @@ namespace _project.Scripts.Features.Location
         
             if (_globalContainer.TryGetHandler(out PlayerCharacterInstanceHandler characterHandler))
             {
-                TrySetCamera(characterHandler.GetCharacter());
+                TrySetCamera(characterHandler.GetInstance());
             }
         
             _lastSceneType = sceneType;
@@ -61,7 +62,7 @@ namespace _project.Scripts.Features.Location
         {
             if (_globalContainer.TryGetHandler(out PlayerCharacterInstanceHandler characterHandler))
             {
-                var character = characterHandler.GetCharacter();
+                var character = characterHandler.GetInstance();
                 character.transform.position = _currentLocationView.CharacterLoadPointTransform.position;
 
                 TrySetCamera(character);
@@ -72,7 +73,7 @@ namespace _project.Scripts.Features.Location
         {
             if (_globalContainer.TryGetHandler(out ViewTrackingCameraInstanceHandler cameraHandler))
             {
-                cameraHandler.GetTrackingCamera().Set(character, 
+                cameraHandler.GetInstance().Set(character, 
                     _currentLocationView.EnterBound.transform.position.x, 
                     _currentLocationView.ExitBound.transform.position.x);
             }

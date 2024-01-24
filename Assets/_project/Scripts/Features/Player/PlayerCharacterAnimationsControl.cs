@@ -1,5 +1,6 @@
 using _project.Scripts.Configs;
 using _project.Scripts.Features.Input;
+using _project.Scripts.Features.Input.Base;
 using UnityEngine;
 
 namespace _project.Scripts.Features.Player
@@ -16,9 +17,9 @@ namespace _project.Scripts.Features.Player
         private void Update()
         {
             _animator.SetBool(_runParamName, 
-                _playerCharacterMovement.IsGrounded && _inputHandler.GetHorizontalAxisValue() != 0);
+                _playerCharacterMovement.IsGrounded && _inputHandler.GetAxisValue(AxisKind.Horizontal) != 0);
 
-            if (_playerCharacterMovement.IsGrounded && _inputHandler.GetJumpAxisValue(true) > 0)
+            if (_playerCharacterMovement.IsGrounded && _inputHandler.GetAxisValue(AxisKind.Jump, true) > 0)
             {
                 _animator.SetTrigger(_jumpParamName);
             }

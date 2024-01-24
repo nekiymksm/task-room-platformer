@@ -1,5 +1,6 @@
 using _project.Scripts.Configs;
 using _project.Scripts.Features.Input;
+using _project.Scripts.Features.Input.Base;
 using _project.Scripts.Features.Location.Items;
 using UnityEngine;
 
@@ -19,8 +20,8 @@ namespace _project.Scripts.Features.Player
 
         private void FixedUpdate()
         {
-            _moveDirection.x = _inputHandler.GetHorizontalAxisValue();
-            _moveDirection.y = _inputHandler.GetJumpAxisValue(true);
+            _moveDirection.x = _inputHandler.GetAxisValue(AxisKind.Horizontal);
+            _moveDirection.y = _inputHandler.GetAxisValue(AxisKind.Jump, true);
 
             if (IsGrounded && Mathf.Abs(_rigidbody.velocity.x) < _playerCharacterConfig.MaxMoveSpeed)
             {
