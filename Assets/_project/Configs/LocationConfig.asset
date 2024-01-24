@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: deb838353b454ccab49774118bd0a7c6, type: 3}
   m_Name: LocationConfig
   m_EditorClassIdentifier: 
-  _levelLocationPrefab: {fileID: 4177579830505487347, guid: e2c4a35a7701a744ea27cf255d44e9a2, type: 3}
-  _passLocationPrefab: {fileID: 4003848797070633821, guid: 61a0bc48ac6487c47896a48e352cbe3e, type: 3}
+  levelLocationViewPrefab: {fileID: 4177579830505487347, guid: e2c4a35a7701a744ea27cf255d44e9a2, type: 3}
+  passLocationViewPrefab: {fileID: 4003848797070633821, guid: 61a0bc48ac6487c47896a48e352cbe3e, type: 3}

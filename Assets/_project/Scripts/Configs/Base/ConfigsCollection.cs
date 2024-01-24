@@ -10,7 +10,7 @@ namespace _project.Scripts.Configs
 
         public T GetConfig<T>() where T : ScriptableObject
         {
-            if (CollectionSearcher.TryGetItem(_configs, out T config))
+            if (CollectionItemSearcher.TryGetItem(_configs, out T config))
             {
                 return config;
             }

@@ -1,5 +1,6 @@
-using _project.Scripts.Location;
-using _project.Scripts.Location.Base;
+using _project.Scripts.Features.Location.Base;
+using _project.Scripts.Features.Location.Views;
+using _project.Scripts.Features.Scenes.Base;
 using UnityEngine;
 
 namespace _project.Scripts.Configs
@@ -7,21 +8,21 @@ namespace _project.Scripts.Configs
     [CreateAssetMenu(fileName = "LocationConfig", menuName = "Configs/LocationConfig")]
     public class LocationConfig : ScriptableObject
     {
-        [SerializeField] private LevelLocation _levelLocationPrefab;
-        [SerializeField] private PassLocation _passLocationPrefab;
+        [SerializeField] private LevelLocationView levelLocationViewPrefab;
+        [SerializeField] private PassLocationView passLocationViewPrefab;
 
-        public LoadableLocation GetLocation(LocationType locationType)
+        public LocationView GetLocation(SceneType sceneType)
         {
-            switch (locationType)
+            switch (sceneType)
             {
-                case LocationType.Level:
-                    return Instantiate(_levelLocationPrefab);
+                case SceneType.Level:
+                    return Instantiate(levelLocationViewPrefab);
                 
-                case LocationType.Pass:
-                    return Instantiate(_passLocationPrefab);
+                case SceneType.Pass:
+                    return Instantiate(passLocationViewPrefab);
             }
             
-            return Instantiate(_passLocationPrefab);
+            return Instantiate(passLocationViewPrefab);
         }
     }
 }

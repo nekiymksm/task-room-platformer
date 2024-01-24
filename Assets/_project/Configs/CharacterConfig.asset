@@ -17,3 +17,5 @@ MonoBehaviour:
   <MaxMoveSpeed>k__BackingField: 5
   <JumpForce>k__BackingField: 75
   <RotationSpeed>k__BackingField: 0.175
+  <RunAnimationParamName>k__BackingField: Movement
+  <JumpAnimationParamName>k__BackingField: Jump

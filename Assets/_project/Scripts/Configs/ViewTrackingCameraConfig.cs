@@ -1,5 +1,5 @@
 using _project.Scripts.Configs.Base;
-using _project.Scripts.ViewTracking;
+using _project.Scripts.Features.ViewTracking;
 using UnityEngine;
 
 namespace _project.Scripts.Configs
