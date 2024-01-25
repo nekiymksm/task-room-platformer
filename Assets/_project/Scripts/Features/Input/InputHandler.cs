@@ -1,19 +1,36 @@
-using System.Linq.Expressions;
+using System;
 using _project.Scripts.CoreControl.Base;
-using _project.Scripts.Features.Input.Base;
 using UnityEngine;
 
 namespace _project.Scripts.Features.Input
 {
-    public class InputHandler : IHandler
+    public class InputHandler : MonoBehaviour, IHandler
     {
         private const string HorizontalAxisName = "Horizontal";
         private const string JumpAxisName = "Jump";
         private const string CancelAxisName = "Cancel";
-        
-        private float _cancelAxisValue;
-        private bool _isCancelPressed;
-        
+
+        private bool _isJumpButtonHold;
+        private bool _isCancelButtonHold;
+
+        public float HorizontalAxisValue => UnityEngine.Input.GetAxis(HorizontalAxisName);
+
+        public event Action JumpButtonDown;
+        public event Action CancelButtonDown;
+
+        private void FixedUpdate()
+        {
+            if (CheckButtonHold(UnityEngine.Input.GetAxis(JumpAxisName), ref _isJumpButtonHold))
+            {
+                JumpButtonDown?.Invoke();
+            }
+
+            if (CheckButtonHold(UnityEngine.Input.GetAxis(CancelAxisName), ref _isCancelButtonHold))
+            {
+                CancelButtonDown?.Invoke();
+            }
+        }
+
         public void Init(HandlersContainer handlersContainer)
         {
         }
@@ -22,36 +39,24 @@ namespace _project.Scripts.Features.Input
         {
         }
 
-        public float GetAxisValue(AxisKind axisKind, bool isRaw = false)
+        private bool CheckButtonHold(float axisValue, ref bool isPressed)
         {
-            string axisName = string.Empty;
-            
-            switch (axisKind)
+            if (isPressed)
             {
-                case AxisKind.Horizontal:
-                    axisName = HorizontalAxisName;
-                    break;
+                if (axisValue <= 0)
+                {
+                    isPressed = false;
+                }
                 
-                case AxisKind.Jump:
-                    axisName = JumpAxisName;
-                    break;
+                return false;
             }
             
-            return isRaw 
-                ? UnityEngine.Input.GetAxisRaw(axisName) 
-                : UnityEngine.Input.GetAxis(axisName);
-        }
-
-        public bool TryCancel()
-        {
-            _cancelAxisValue = UnityEngine.Input.GetAxisRaw(CancelAxisName);
-            
-            if (_isCancelPressed == false && _cancelAxisValue > 0)
+            if (isPressed == false && axisValue > 0)
             {
-                _isCancelPressed = true;
+                isPressed = true;
             }
             
-            return _isCancelPressed;
+            return isPressed;
         }
     }
 }

@@ -15,7 +15,7 @@ MonoBehaviour:
   _prefab: {fileID: 3044624845723263820, guid: fd9fcffed29671c488f4bfdb2d86c201, type: 3}
   <MoveForce>k__BackingField: 50
   <MaxMoveSpeed>k__BackingField: 5
-  <JumpForce>k__BackingField: 75
+  <JumpForce>k__BackingField: 250
   <RotationSpeed>k__BackingField: 0.175
   <RunAnimationParamName>k__BackingField: IsRun
   <JumpAnimationParamName>k__BackingField: JumpTrigger

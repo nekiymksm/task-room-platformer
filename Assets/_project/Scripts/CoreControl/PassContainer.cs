@@ -8,10 +8,7 @@ namespace _project.Scripts.CoreControl
     {
         protected override void OnRun()
         {
-            if (GlobalContainer.Instance.TryGetHandler(out LocationLoadHandler loadHandler))
-            {
-                loadHandler.Load(SceneType.Pass);
-            }
+            GlobalContainer.Instance.GetHandler<LocationLoadHandler>().Load(SceneType.Pass);
         }
     }
 }

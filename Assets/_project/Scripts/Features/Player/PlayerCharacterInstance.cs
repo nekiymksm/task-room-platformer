@@ -16,10 +16,10 @@ namespace _project.Scripts.Features.Player
         
         public void Guide(PlayerCharacterConfig config)
         {
-            GlobalContainer.Instance.TryGetHandler(out InputHandler handler);
+            var handler = GlobalContainer.Instance.GetHandler<InputHandler>();
             
-            _playerCharacterMovement.Init(config, handler);
-            _playerCharacterAnimationsControl.Init(handler, _playerCharacterMovement, config);
+            _playerCharacterAnimationsControl.Init(config);
+            _playerCharacterMovement.Init(config, handler, _playerCharacterAnimationsControl);
         }
     }
 }

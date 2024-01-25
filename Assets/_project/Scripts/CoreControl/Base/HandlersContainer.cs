@@ -46,9 +46,10 @@ namespace _project.Scripts.CoreControl.Base
         {
         }
         
-        public bool TryGetHandler<T>(out T handler) where T : class, IHandler
+        public T GetHandler<T>() where T : class, IHandler
         {
-            return CollectionItemSearcher.TryGetItem(_handlers, out handler);
+            CollectionItemSearcher.TryGetItem(_handlers, out T handler);
+            return handler;
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using _project.Scripts.CoreControl.Base;
+﻿using _project.Scripts.CoreControl.Base;
 using _project.Scripts.Features.Input;
 using _project.Scripts.Features.Location;
 using _project.Scripts.Features.Player;
@@ -15,27 +14,41 @@ namespace _project.Scripts.CoreControl
     {
         public static GlobalContainer Instance;
 
+        [SerializeField] private InputHandler _inputHandler;
+
+        private LocationLoadHandler _locationLoadHandler;
+        private PlayerCharacterInstanceHandler _playerCharacterInstanceHandler;
+        private ViewTrackingCameraInstanceHandler _viewTrackingCameraInstanceHandler;
+        private SessionUiInstanceHandler _sessionUiInstanceHandler;
+        
         protected override void OnInit()
         {
             DontDestroyOnLoad(gameObject);
             Instance = this;
-        
-            AddHandler(new LocationLoadHandler());
-            AddHandler(new PlayerCharacterInstanceHandler());
-            AddHandler(new ViewTrackingCameraInstanceHandler());
-            AddHandler(new InputHandler());
-            // AddHandler(new SessionUiInstanceHandler());
+
+            _locationLoadHandler = new LocationLoadHandler();
+            _playerCharacterInstanceHandler = new PlayerCharacterInstanceHandler();
+            _viewTrackingCameraInstanceHandler = new ViewTrackingCameraInstanceHandler();
+            _sessionUiInstanceHandler = new SessionUiInstanceHandler();
+            
+            AddHandler(_locationLoadHandler);
+            AddHandler(_playerCharacterInstanceHandler);
+            AddHandler(_viewTrackingCameraInstanceHandler);
+            AddHandler(_inputHandler);
+            AddHandler(_sessionUiInstanceHandler);
         }
 
         protected override void OnRun()
         {
-            // SceneManager.LoadScene((int)SceneType.Menu);
+            SceneManager.LoadScene((int)SceneType.Menu);
         }
 
-        private void Update()
+        public void ResetInstances()
         {
-            TryGetHandler(out InputHandler handler);
-            Debug.LogError(handler.TryCancel());
+            _locationLoadHandler.IsFirstLoad = true;
+            _playerCharacterInstanceHandler.CollapseInstance();
+            _viewTrackingCameraInstanceHandler.CollapseInstance();
+            _sessionUiInstanceHandler.CollapseInstance();
         }
     }
 }

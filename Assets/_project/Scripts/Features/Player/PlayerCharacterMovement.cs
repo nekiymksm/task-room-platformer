@@ -1,6 +1,5 @@
 using _project.Scripts.Configs;
 using _project.Scripts.Features.Input;
-using _project.Scripts.Features.Input.Base;
 using _project.Scripts.Features.Location.Items;
 using UnityEngine;
 
@@ -13,27 +12,36 @@ namespace _project.Scripts.Features.Player
 
         private PlayerCharacterConfig _playerCharacterConfig;
         private InputHandler _inputHandler;
+        private PlayerCharacterAnimationsControl _animationsControl;
         private Vector3 _moveDirection;
         private Vector3 _moveRotation;
-
-        public bool IsGrounded { get; private set; }
+        private bool _isGrounded;
+        
+        private void Start()
+        {
+            _inputHandler.JumpButtonDown += OnJump;
+        }
 
         private void FixedUpdate()
         {
-            _moveDirection.x = _inputHandler.GetAxisValue(AxisKind.Horizontal);
-            _moveDirection.y = _inputHandler.GetAxisValue(AxisKind.Jump, true);
+            _moveDirection.x = _inputHandler.HorizontalAxisValue;
 
-            if (IsGrounded && Mathf.Abs(_rigidbody.velocity.x) < _playerCharacterConfig.MaxMoveSpeed)
+            if (_isGrounded)
             {
-                _rigidbody.AddForce(_moveDirection * _playerCharacterConfig.MoveForce, ForceMode.Impulse);
+                if (Mathf.Abs(_rigidbody.velocity.x) < _playerCharacterConfig.MaxMoveSpeed)
+                {
+                    _rigidbody.AddForce(_moveDirection * _playerCharacterConfig.MoveForce, ForceMode.Impulse);
+                }
+                
+                _animationsControl.PlayRun(Mathf.Abs(_moveDirection.x) > 0);
             }
 
-            if (IsGrounded && _moveDirection.y > 0)
-            {
-                _rigidbody.AddForce(Vector3.up * _playerCharacterConfig.JumpForce, ForceMode.Impulse);
-            }
-            
             SetRotation();
+        }
+
+        private void OnDestroy()
+        {
+            _inputHandler.JumpButtonDown -= OnJump;
         }
 
         private void OnCollisionStay(Collision collision)
@@ -44,7 +52,7 @@ namespace _project.Scripts.Features.Player
                 {
                     if (contact.point.y <= _contactPointTransform.position.y)
                     {
-                        IsGrounded = true;
+                        _isGrounded = true;
                     }
                 }
             }
@@ -54,14 +62,16 @@ namespace _project.Scripts.Features.Player
         {
             if (collision.collider.TryGetComponent(out Platform platform))
             {
-                IsGrounded = false;
+                _isGrounded = false;
             }
         }
 
-        public void Init(PlayerCharacterConfig playerCharacterConfig, InputHandler inputHandler)
+        public void Init(PlayerCharacterConfig playerCharacterConfig, InputHandler inputHandler, 
+            PlayerCharacterAnimationsControl animationsControl)
         {
             _playerCharacterConfig = playerCharacterConfig;
             _inputHandler = inputHandler;
+            _animationsControl = animationsControl;
         }
 
         private void SetRotation()
@@ -82,7 +92,7 @@ namespace _project.Scripts.Features.Player
 
                 case 0:
                 {
-                    if (IsGrounded && Mathf.Abs(_rigidbody.velocity.x) < 0.5f)
+                    if (_isGrounded && Mathf.Abs(_rigidbody.velocity.x) < 0.5f)
                     {
                         _moveRotation.y = Mathf.Lerp(_moveRotation.y, 0, _playerCharacterConfig.RotationSpeed);
                     } 
@@ -91,6 +101,15 @@ namespace _project.Scripts.Features.Player
             }
 
             _rigidbody.MoveRotation(Quaternion.Euler(_moveRotation));
+        }
+
+        private void OnJump()
+        {
+            if (_isGrounded)
+            {
+                _rigidbody.AddForce(Vector3.up * _playerCharacterConfig.JumpForce, ForceMode.Impulse);
+                _animationsControl.PlayJump();
+            }
         }
     }
 }
