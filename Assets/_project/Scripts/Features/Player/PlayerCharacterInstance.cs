@@ -21,5 +21,10 @@ namespace _project.Scripts.Features.Player
             _playerCharacterAnimationsControl.Init(config);
             _playerCharacterMovement.Init(config, handler, _playerCharacterAnimationsControl);
         }
+
+        public void TakeHit()
+        {
+            gameObject.SetActive(false);
+        }
     }
 }
