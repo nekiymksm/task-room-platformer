@@ -1,17 +1,19 @@
 using _project.Scripts.CoreControl;
-using _project.Scripts.Features.Scenes.Base;
+using _project.Scripts.Features.StateObserving;
+using _project.Scripts.Features.StateObserving.Base;
 using _project.Scripts.Ui.Base;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace _project.Scripts.Ui.Session
 {
-    public class SessionPauseView : UiElement
+    public class PauseView : UiElement
     {
         [SerializeField] private Button _resume;
         [SerializeField] private Button _exitMenu;
 
+        private GameStateHandler _gameStateHandler;
+        
         private void Start()
         {
             _resume.onClick.AddListener(OnResumeButtonClick);
@@ -22,6 +24,11 @@ namespace _project.Scripts.Ui.Session
         {
             _resume.onClick.RemoveListener(OnResumeButtonClick);
             _exitMenu.onClick.RemoveListener(OnExitMenuButtonClick);
+        }
+
+        protected override void OnInit()
+        {
+            _gameStateHandler = GlobalContainer.Instance.GetHandler<GameStateHandler>();
         }
 
         protected override void OnHide()
@@ -35,8 +42,7 @@ namespace _project.Scripts.Ui.Session
 
         private void OnExitMenuButtonClick()
         {
-            GlobalContainer.Instance.ResetInstances();
-            SceneManager.LoadScene((int)SceneType.Menu);
+            _gameStateHandler.NotifyObservers(GameStateKind.Menu);
         }
     }
 }

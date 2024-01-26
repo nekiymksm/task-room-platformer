@@ -1,13 +1,16 @@
 using _project.Scripts.CoreControl;
 using _project.Scripts.Features.Input;
+using _project.Scripts.Features.StateObserving;
+using _project.Scripts.Features.StateObserving.Base;
 using _project.Scripts.Ui.Base;
 
 namespace _project.Scripts.Ui.Session
 {
     public class SessionUiHandler : UiHandler
     {
+        private GameStateHandler _gameStateHandler;
         private InputHandler _inputHandler;
-        private SessionPauseView _sessionPauseView;
+        private PauseView _pauseView;
 
         private void OnDestroy()
         {
@@ -16,8 +19,11 @@ namespace _project.Scripts.Ui.Session
 
         protected override void OnInit()
         {
-            _inputHandler = GlobalContainer.Instance.GetHandler<InputHandler>();
-            _sessionPauseView = GetElement<SessionPauseView>();
+            var globalContainer = GlobalContainer.Instance;
+            
+            _gameStateHandler = globalContainer.GetHandler<GameStateHandler>();
+            _inputHandler = globalContainer.GetHandler<InputHandler>();
+            _pauseView = GetElement<PauseView>();
         }
 
         protected override void OnRun()
@@ -27,13 +33,17 @@ namespace _project.Scripts.Ui.Session
 
         private void OnCancelButtonDown()
         {
-            if (_sessionPauseView.gameObject.activeSelf)
+            switch (_gameStateHandler.CurrentGameState)
             {
-                _sessionPauseView.Hide();
-            }
-            else
-            {
-                _sessionPauseView.Show();
+                case GameStateKind.Pause:
+                    _pauseView.Hide();
+                    _gameStateHandler.NotifyObservers(GameStateKind.Resume);
+                    break;
+                
+                case GameStateKind.Resume:
+                    _pauseView.Show();
+                    _gameStateHandler.NotifyObservers(GameStateKind.Pause);
+                    break;
             }
         }
     }

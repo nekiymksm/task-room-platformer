@@ -15,6 +15,7 @@ namespace _project.Scripts.CoreControl.Base
 
         public void Run()
         {
+            OnRun();
         }
         
         public T GetInstance()
@@ -35,5 +36,9 @@ namespace _project.Scripts.CoreControl.Base
         }
         
         protected abstract T Create();
+
+        protected virtual void OnRun()
+        {
+        }
     }
 }

@@ -629,7 +629,7 @@ GameObject:
   - component: {fileID: 7526376526784486813}
   - component: {fileID: 2318288211490710833}
   m_Layer: 0
-  m_Name: SessionUiHandler
+  m_Name: session_ui_handler
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

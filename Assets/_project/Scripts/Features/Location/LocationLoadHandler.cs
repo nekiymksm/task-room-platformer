@@ -17,9 +17,9 @@ namespace _project.Scripts.Features.Location
         private GlobalContainer _globalContainer;
         private PlayerCharacterInstanceHandler _playerCharacterInstanceHandler;
         private ConfigsCollection _configsCollection;
-        private LocationView _currentLocationView;
         private SceneType _lastSceneType;
 
+        public LocationView CurrentLocationView { get; private set; }
         public bool IsFirstLoad { private get; set; }
 
         public void Init(HandlersContainer handlersContainer)
@@ -37,12 +37,12 @@ namespace _project.Scripts.Features.Location
 
         public void Load(SceneType sceneType)
         {
-            var exitPoint = IsFirstLoad ? Vector3.zero : _currentLocationView.ExitBound.transform.position;
+            var exitPoint = IsFirstLoad ? Vector3.zero : CurrentLocationView.ExitBound.transform.position;
             SceneManager.SetActiveScene(SceneManager.GetSceneByBuildIndex((int)sceneType));
 
-            _currentLocationView = _configsCollection.GetConfig<LocationConfig>().GetLocation(sceneType);
-            _currentLocationView.Set(exitPoint);
-            _currentLocationView.ExitBound.CharacterExit += OnLocationExit;
+            CurrentLocationView = _configsCollection.GetConfig<LocationConfig>().GetLocation(sceneType);
+            CurrentLocationView.Set(exitPoint);
+            CurrentLocationView.ExitBound.CharacterExit += OnLocationExit;
 
             if (IsFirstLoad)
             {
@@ -62,7 +62,7 @@ namespace _project.Scripts.Features.Location
         private void OnFirstLoad()
         {
             var character = _playerCharacterInstanceHandler.GetInstance();
-            character.transform.position = _currentLocationView.CharacterLoadPointTransform.position;
+            character.transform.position = CurrentLocationView.CharacterLoadPointTransform.position;
 
             TrySetCamera(character);
 
@@ -75,13 +75,13 @@ namespace _project.Scripts.Features.Location
         {
             _globalContainer.GetHandler<ViewTrackingCameraInstanceHandler>().GetInstance()
                 .Set(character, 
-                    _currentLocationView.EnterBound.transform.position.x, 
-                    _currentLocationView.ExitBound.transform.position.x);
+                    CurrentLocationView.EnterBound.transform.position.x, 
+                    CurrentLocationView.ExitBound.transform.position.x);
         }
     
         private void OnLocationExit()
         {
-            _currentLocationView.ExitBound.CharacterExit -= OnLocationExit;
+            CurrentLocationView.ExitBound.CharacterExit -= OnLocationExit;
             SceneManager.LoadScene((int) GetNextLocationType(), LoadSceneMode.Additive);
         }
 

@@ -7,6 +7,7 @@ namespace _project.Scripts.Features.Player
 {
     public class PlayerCharacterMovement : MonoBehaviour
     {
+        [SerializeField] private Collider _mainCollider;
         [SerializeField] private Rigidbody _rigidbody;
         [SerializeField] private Transform _contactPointTransform;
 
@@ -16,6 +17,7 @@ namespace _project.Scripts.Features.Player
         private Vector3 _moveDirection;
         private Vector3 _moveRotation;
         private bool _isGrounded;
+        private bool _canMove;
         
         private void Start()
         {
@@ -24,6 +26,11 @@ namespace _project.Scripts.Features.Player
 
         private void FixedUpdate()
         {
+            if (_canMove == false)
+            {
+                return;
+            }
+            
             _moveDirection.x = _inputHandler.HorizontalAxisValue;
 
             if (_isGrounded)
@@ -74,6 +81,15 @@ namespace _project.Scripts.Features.Player
             _animationsControl = animationsControl;
         }
 
+        public void SetBlocking(bool isBlock)
+        {
+            _canMove = !isBlock;
+            _rigidbody.detectCollisions = !isBlock;
+            _rigidbody.isKinematic = isBlock;
+            _mainCollider.enabled = !isBlock;
+            enabled = !isBlock;
+        }
+
         private void SetRotation()
         {
             switch (_moveDirection.x)
@@ -105,6 +121,11 @@ namespace _project.Scripts.Features.Player
 
         private void OnJump()
         {
+            if (_canMove == false)
+            {
+                return;
+            }
+            
             if (_isGrounded)
             {
                 _rigidbody.AddForce(Vector3.up * _playerCharacterConfig.JumpForce, ForceMode.Impulse);

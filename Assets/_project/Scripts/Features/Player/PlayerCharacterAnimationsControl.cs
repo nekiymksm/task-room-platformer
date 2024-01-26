@@ -25,5 +25,10 @@ namespace _project.Scripts.Features.Player
         {
             _animator.SetTrigger(_jumpParamName);
         }
+
+        public void SetBlock(bool isBlock)
+        {
+            _animator.enabled = !isBlock;
+        }
     }
 }

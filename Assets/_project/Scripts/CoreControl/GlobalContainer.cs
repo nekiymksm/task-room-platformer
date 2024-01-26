@@ -3,6 +3,7 @@ using _project.Scripts.Features.Input;
 using _project.Scripts.Features.Location;
 using _project.Scripts.Features.Player;
 using _project.Scripts.Features.Scenes.Base;
+using _project.Scripts.Features.StateObserving;
 using _project.Scripts.Features.ViewTracking.Base;
 using _project.Scripts.Ui.Base;
 using UnityEngine;
@@ -31,6 +32,7 @@ namespace _project.Scripts.CoreControl
             _viewTrackingCameraInstanceHandler = new ViewTrackingCameraInstanceHandler();
             _sessionUiInstanceHandler = new SessionUiInstanceHandler();
             
+            AddHandler(new GameStateHandler());
             AddHandler(_locationLoadHandler);
             AddHandler(_playerCharacterInstanceHandler);
             AddHandler(_viewTrackingCameraInstanceHandler);
